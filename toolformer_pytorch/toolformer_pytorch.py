@@ -17,7 +17,7 @@ from toolformer_pytorch.optimizer import get_optimizer
 from toolformer_pytorch.prompts import DEFAULT_PROMPT_INPUT_TAG
 
 from beartype import beartype
-from beartype.typing import Callable, Optional, Union, List, Tuple
+from beartype.typing import Dict, Callable, Optional, Union, List, Tuple
 
 from tqdm import tqdm
 from x_clip.tokenizer import tokenizer
@@ -107,7 +107,7 @@ def parse_param(s: str) -> Optional[Union[int, float, str]]:
 
 @beartype
 def replace_fn(
-    registry: dict[str, Callable],
+    registry: Dict[str, Callable],
     matches,
     delimiter = '→'
 ):
@@ -188,7 +188,7 @@ def replace_all_but_first(
     return re.sub(regex, replace_, text)
 
 def invoke_tools(
-    registry: dict[str, Callable],
+    registry: Dict[str, Callable],
     text: str,
     delimiter: str = '→',
     api_start = ' [',
@@ -199,7 +199,7 @@ def invoke_tools(
     return re.sub(regex, replace_, text)
 
 def invoke_tools_on_batch_sequences(
-    registry: dict[str, Callable],
+    registry: Dict[str, Callable],
     token_ids: torch.Tensor,
     *,
     encode: Callable,
@@ -606,7 +606,7 @@ class Toolformer(nn.Module):
         tokenizer_decode: Callable = tokenizer.decode,
         post_prompt_callback: Callable = identity,
         prompt_input_tag: str = DEFAULT_PROMPT_INPUT_TAG,
-        exclude_filters: dict[str, Callable[[str], bool]] = dict(),
+        exclude_filters: Dict[str, Callable[[str], bool]] = dict(),
         finetune = False,
         finetune_lr = 1e-4,
         finetune_wd = 1e-2,
